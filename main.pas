@@ -46,7 +46,6 @@ type
     SpinEdit1: TSpinEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure miArchiClick(Sender: TObject);
     procedure miBolspiraClick(Sender: TObject);
     procedure miBoom2Click(Sender: TObject);
@@ -180,11 +179,6 @@ begin
   end;
 end;
 
-procedure TfrmMain.FormShow(Sender: TObject);
-begin
-  //Clear;
-end;
-
 procedure TfrmMain.miArchiClick(Sender: TObject);
 var
   a, r, t, x, y: Double;
@@ -271,11 +265,11 @@ var
 begin
   Clear;
   Label4.Caption := 'Boomstructuur in drietallig talstelsel';
-  xf := pbMain.Width/4;
-  yf := pbMain.Height/2.5;
+  {xf := pbMain.Width/4;
+  yf := pbMain.Height/4;
   xs := pbMain.Width div 2;
-  ys := pbMain.Height div 2;
-  //MinMaxPercNegYfToSmallestFactShift(-1.2,1.2,-0.9,0.9,0.05,False);
+  ys := pbMain.Height div 2;}
+  MinMaxPercNegYfToSmallestFactShift(-0.48,0.96,-0.831,0.831,0.05,False);
   //MinMaxPercXPercYToFactShift(-1.2,1.2,-0.9,0.9,0.05,0.05,False);
   p := 5;
   a := 0.5;
@@ -583,7 +577,10 @@ begin
   Label3.Visible := True;
   cbbBasisLijn.Visible := True;
   cbbModel.Visible := True;
-  MinMaxPercNegYfToSmallestFactShift(-2.4,2.4,-1.8,1.8,0.05,False);
+  if cbbBasislijn.ItemIndex = 1 then
+    MinMaxPercNegYfToSmallestFactShift(-1.4,1.4,-1.5,1.5,0.05,False)
+  else
+    MinMaxPercNegYfToSmallestFactShift(-1,1,-1,1,0.05,False);
   if cbbBasislijn.ItemIndex=0 then
   begin
   // kruis anti-clockwise
@@ -1117,7 +1114,7 @@ var
 begin
   Clear;
   Label4.Caption := 'Scheve Pythagorasboom';
-  MinMaxPercNegYfToSmallestFactShift(-2.5,5.5,-2,4,0.05,True);
+  MinMaxPercNegYfToSmallestFactShift(-1.7,4.8,-1.1,3.33,0.05,True);
   f := pi/3;
   c := Cos(f);
   s := Sin(f);
@@ -1220,13 +1217,13 @@ var
 begin
   Clear;
   Label4.Caption := 'Pythagorasboom, backtrackmethode';
-  MinMaxPercNegYfToSmallestFactShift(-5,5,-3,4.5,0.05,True);
+  MinMaxPercNegYfToSmallestFactShift(-3.2,3,-1,3.3,0.05,True);
   //MinMaxPercXPercYToFactShift(-5,5,-3,4.5,0.05,0.05,True);
-  p := 1;
+  p := 12;
   f := pi/5;
   c := Cos(f);
   s := Sin(f);
-  a1 := c*s;
+  a1 := -c*s;
   a2 := Power(c,2);
   b1 := a1+a2;
   b2 := -a1+a2;
@@ -1238,8 +1235,6 @@ begin
   y1[0] := 0;
   u1[0] := 1;
   v1[0] := 0;
-  xf := xf*2.75;
-  yf := yf*2.5;
   with pbMain.Canvas do
   begin
     Line(Trunc(xs),Trunc(ys),Trunc(xs),Trunc(ys+yf*-1));
@@ -1274,10 +1269,11 @@ var
 begin
   Clear;
   Label4.Caption := 'Zeef van Sierpinski';
-  xf := pbMain.Width/4;
+  {xf := pbMain.Width/4;
   yf := pbMain.Height/4;
   xs := pbMain.Width div 2;
-  ys := pbMain.Height div 2;
+  ys := pbMain.Height div 2;}
+  MinMaxPercNegYfToSmallestFactShift(-1.723,1.723,-1.973,1.01,0.05,False);
   p := 5;
   a := Sqrt(3);
   for m := 0 to p do
@@ -1349,10 +1345,10 @@ var
 begin
   Clear;
   Label4.Caption := 'Wikkellijn van cirkel';
-  MinMaxPercNegYfToSmallestFactShift(-12,12,-9,9,0.05,True);
-  a := 25;
-  pbMain.Canvas.EllipseC(Round(xs),Round(ys),a,a);
+  MinMaxPercNegYfToSmallestFactShift(-4.72,7.86,-6.29,3.15,0.05,True);
   a := 1;
+  pbMain.Canvas.Brush.Color := clBlue;
+  pbMain.Canvas.EllipseC(Trunc(xs),Trunc(ys),Round(xf*a),Round(yf*a));
   pbMain.Canvas.MoveTo(Round(xs+xf*a),Round(ys));
   for n := 0 to 100 do
   begin
@@ -1409,13 +1405,14 @@ end;
 
 procedure TfrmMain.Clear;
 begin
-  pbMain.Canvas.Clear;
   Label1.Visible := False;
   Label2.Visible := False;
   Label3.Visible := False;
   SpinEdit1.Visible := False;
   cbbBasisLijn.Visible := False;
   cbbModel.Visible := False;
+  pbMain.Canvas.Brush.Color := clWhite;
+  pbMain.Canvas.FillRect(0,0,pbMain.Width,pbMain.Height);
 end;
 
 end.

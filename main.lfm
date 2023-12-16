@@ -1,51 +1,52 @@
 object frmMain: TfrmMain
   Left = 319
-  Height = 537
+  Height = 900
   Top = 147
-  Width = 865
+  Width = 800
   Caption = 'Fractals'
-  ClientHeight = 537
-  ClientWidth = 865
-  DesignTimePPI = 120
+  ClientHeight = 900
+  ClientWidth = 800
+  Color = clGray
   Menu = MainMenu1
   OnCreate = FormCreate
   OnResize = FormResize
-  OnShow = FormShow
   object pbMain: TPaintBox
-    Left = 40
-    Height = 462
-    Top = 60
-    Width = 635
+    Left = 32
+    Height = 800
+    Top = 48
+    Width = 616
     Anchors = [akTop, akLeft, akRight, akBottom]
+    ParentColor = False
   end
   object SpinEdit1: TSpinEdit
-    Left = 703
-    Height = 28
-    Top = 64
-    Width = 119
+    Left = 671
+    Height = 23
+    Top = 51
+    Width = 95
     Anchors = [akTop, akRight]
     OnChange = SpinEdit1Change
     TabOrder = 0
     Visible = False
   end
   object Label1: TLabel
-    Left = 703
-    Height = 20
-    Top = 32
-    Width = 116
+    Left = 670
+    Height = 16
+    Top = 26
+    Width = 93
     Anchors = [akTop, akRight]
     AutoSize = False
     Caption = 'Label1'
+    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object cbbBasisLijn: TComboBox
-    Left = 703
-    Height = 28
-    Top = 152
-    Width = 125
+    Left = 670
+    Height = 23
+    Top = 122
+    Width = 100
     Anchors = [akTop, akRight]
-    ItemHeight = 20
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       'Vierkant -'
@@ -61,32 +62,34 @@ object frmMain: TfrmMain
     Visible = False
   end
   object Label2: TLabel
-    Left = 703
-    Height = 20
-    Top = 112
-    Width = 44
+    Left = 670
+    Height = 15
+    Top = 90
+    Width = 34
     Anchors = [akTop, akRight]
     Caption = 'Label2'
+    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object Label3: TLabel
-    Left = 703
-    Height = 20
-    Top = 208
-    Width = 44
+    Left = 670
+    Height = 15
+    Top = 166
+    Width = 34
     Anchors = [akTop, akRight]
     Caption = 'Label3'
+    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object cbbModel: TComboBox
-    Left = 703
-    Height = 28
-    Top = 248
-    Width = 125
+    Left = 670
+    Height = 23
+    Top = 198
+    Width = 100
     Anchors = [akTop, akRight]
-    ItemHeight = 20
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       '0'
@@ -104,15 +107,16 @@ object frmMain: TfrmMain
     Visible = False
   end
   object Label4: TLabel
-    Left = 40
-    Height = 44
-    Top = 8
-    Width = 656
+    Left = 32
+    Height = 35
+    Top = 6
+    Width = 616
     Alignment = taCenter
     AutoSize = False
     Caption = 'Fractals'
+    Color = clDefault
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -20
+    Font.Height = -16
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     Font.Style = [fsBold]
@@ -120,8 +124,8 @@ object frmMain: TfrmMain
     ParentFont = False
   end
   object MainMenu1: TMainMenu
-    Left = 72
-    Top = 208
+    Left = 58
+    Top = 166
     object miFractals: TMenuItem
       Caption = 'Fractals'
       object miBoomH1: TMenuItem
