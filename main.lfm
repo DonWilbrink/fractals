@@ -240,6 +240,10 @@ object frmMain: TfrmMain
         Caption = 'Scheve Pythagorasboom'
         OnClick = miPythb2Click
       end
+      object miPythb3: TMenuItem
+        Caption = 'Pythagorasboom, Backtrack methode'
+        OnClick = miPythb3Click
+      end
     end
   end
 end

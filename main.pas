@@ -20,6 +20,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     MainMenu1: TMainMenu;
+    miPythb3: TMenuItem;
     miPythb2: TMenuItem;
     miPythb1: TMenuItem;
     miWervel: TMenuItem;
@@ -63,6 +64,7 @@ type
     procedure miMinkClick(Sender: TObject);
     procedure miPythb1Click(Sender: TObject);
     procedure miPythb2Click(Sender: TObject);
+    procedure miPythb3Click(Sender: TObject);
     procedure miSierClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
@@ -341,6 +343,7 @@ begin
     17: miWervelClick(Self);
     18: miPythb1Click(Self);
     19: miPythb2Click(Self);
+    20: miPythb3Click(Self);
   end;
 end;
 
@@ -1174,6 +1177,93 @@ begin
     end;
   end;
 
+end;
+
+procedure TfrmMain.miPythb3Click(Sender: TObject);
+var
+  x1,y1,x2,y2,u1,v1,u2,v2: Array [0..12] of Double;
+  p, j, n ,m,s1: Integer;
+  f,c,s,a1,a2,b1,b2,c1,c2,d1,d2,x,y,u,v,x3,y3: Double;
+  procedure Tekenboom;
+  var
+    j: Integer;
+  begin
+    for j := s1 to p do
+    begin
+      x := x1[j-1];
+      y := y1[j-1];
+      u := u1[j-1];
+      v := v1[j-1];
+      x3 := u-x;
+      y3 := v-y;
+      x1[j] := x+a1*x3-a2*y3;
+      y1[j] := y+a2*x3+a1*y3;
+      u1[j] := x+b1*x3-b2*y3;
+      v1[j] := y+b2*x3+b1*y3;
+      x2[j] := x+c1*x3-c2*y3;
+      y2[j] := y+c2*x3+c1*y3;
+      u2[j] := x+d1*x3-d2*y3;
+      v2[j] := y+d2*x3+d1*y3;
+      with pbMain.Canvas do
+      begin
+        Line(Trunc(xs+xf*x),Trunc(ys+yf*y),Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j]));
+        LineTo(Trunc(xs+xf*u1[j]),Trunc(ys+yf*v1[j]));
+        LineTo(Trunc(xs+xf*u),Trunc(ys+yf*v));
+        LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
+        LineTo(Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j]));
+        LineTo(Trunc(xs+xf*u2[j]),Trunc(ys+yf*v2[j]));
+        LineTo(Trunc(xs+xf*u),Trunc(ys+yf*v));
+      end;
+    end;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Pythagorasboom, backtrackmethode';
+  MinMaxPercNegYfToSmallestFactShift(-5,5,-3,4.5,0.05,True);
+  //MinMaxPercXPercYToFactShift(-5,5,-3,4.5,0.05,0.05,True);
+  p := 1;
+  f := pi/5;
+  c := Cos(f);
+  s := Sin(f);
+  a1 := c*s;
+  a2 := Power(c,2);
+  b1 := a1+a2;
+  b2 := -a1+a2;
+  c1 := b2;
+  c2 := 1-b1;
+  d1 := 1-a1;
+  d2 := 1-a2;
+  x1[0] := 0;
+  y1[0] := 0;
+  u1[0] := 1;
+  v1[0] := 0;
+  xf := xf*2.75;
+  yf := yf*2.5;
+  with pbMain.Canvas do
+  begin
+    Line(Trunc(xs),Trunc(ys),Trunc(xs),Trunc(ys+yf*-1));
+    LineTo(Trunc(xs+xf*1),Trunc(ys+yf*-1));
+    LineTo(Trunc(xs+xf*1),Trunc(ys));
+  end;
+  s1 := 1;
+  Tekenboom;
+  for m:=1 to Round(Power(2,p-1)-1) do
+  begin
+    s := p;
+    n := m;
+    while n mod 2 = 0 do
+    begin
+      n := n div 2;
+      s := s-1;
+    end;
+    s1 := Trunc(s);
+    x1[s1-1] := x2[s1-1];
+    y1[s1-1] := y2[s1-1];
+    u1[s1-1] := u2[s1-1];
+    v1[s1-1] := v2[s1-1];
+    Tekenboom;
+  end;
 end;
 
 procedure TfrmMain.miSierClick(Sender: TObject);
