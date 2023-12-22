@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 319
+  Left = 329
   Height = 800
-  Top = 0
+  Top = 68
   Width = 1000
   Caption = 'Fractals'
   ClientHeight = 800
@@ -11,6 +11,7 @@ object frmMain: TfrmMain
   Menu = MainMenu1
   OnCreate = FormCreate
   OnResize = FormResize
+  Position = poScreenCenter
   LCLVersion = '3.0.0.3'
   object pbMain: TPaintBox
     Left = 40
