@@ -1,52 +1,53 @@
 object frmMain: TfrmMain
   Left = 319
-  Height = 900
-  Top = 147
-  Width = 800
+  Height = 800
+  Top = 0
+  Width = 1000
   Caption = 'Fractals'
-  ClientHeight = 900
-  ClientWidth = 800
-  Color = clGray
+  ClientHeight = 800
+  ClientWidth = 1000
+  Color = clSilver
+  DesignTimePPI = 120
   Menu = MainMenu1
   OnCreate = FormCreate
   OnResize = FormResize
+  LCLVersion = '3.0.0.3'
   object pbMain: TPaintBox
-    Left = 32
-    Height = 800
-    Top = 48
-    Width = 616
+    Left = 40
+    Height = 675
+    Top = 60
+    Width = 770
     Anchors = [akTop, akLeft, akRight, akBottom]
     ParentColor = False
   end
   object SpinEdit1: TSpinEdit
-    Left = 671
-    Height = 23
-    Top = 51
-    Width = 95
+    Left = 839
+    Height = 28
+    Top = 64
+    Width = 119
     Anchors = [akTop, akRight]
     OnChange = SpinEdit1Change
     TabOrder = 0
     Visible = False
   end
   object Label1: TLabel
-    Left = 670
-    Height = 16
-    Top = 26
-    Width = 93
+    Left = 838
+    Height = 20
+    Top = 32
+    Width = 116
     Anchors = [akTop, akRight]
     AutoSize = False
     Caption = 'Label1'
-    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object cbbBasisLijn: TComboBox
-    Left = 670
-    Height = 23
-    Top = 122
-    Width = 100
+    Left = 837
+    Height = 28
+    Top = 152
+    Width = 125
     Anchors = [akTop, akRight]
-    ItemHeight = 15
+    ItemHeight = 20
     ItemIndex = 0
     Items.Strings = (
       'Vierkant -'
@@ -56,40 +57,38 @@ object frmMain: TfrmMain
       'Driehoek -'
       'Driehoek +'
     )
-    OnChange = miKronkelClick
     TabOrder = 1
     Text = 'Vierkant -'
     Visible = False
+    OnChange = miKronkelClick
   end
   object Label2: TLabel
-    Left = 670
-    Height = 15
-    Top = 90
-    Width = 34
+    Left = 836
+    Height = 20
+    Top = 112
+    Width = 44
     Anchors = [akTop, akRight]
     Caption = 'Label2'
-    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object Label3: TLabel
-    Left = 670
-    Height = 15
-    Top = 166
-    Width = 34
+    Left = 836
+    Height = 20
+    Top = 208
+    Width = 44
     Anchors = [akTop, akRight]
     Caption = 'Label3'
-    Color = clDefault
     ParentColor = False
     Visible = False
   end
   object cbbModel: TComboBox
-    Left = 670
-    Height = 23
-    Top = 198
-    Width = 100
+    Left = 837
+    Height = 28
+    Top = 248
+    Width = 125
     Anchors = [akTop, akRight]
-    ItemHeight = 15
+    ItemHeight = 20
     ItemIndex = 0
     Items.Strings = (
       '0'
@@ -101,22 +100,21 @@ object frmMain: TfrmMain
       '6'
       '7'
     )
-    OnChange = miKronkelClick
     TabOrder = 2
     Text = '0'
     Visible = False
+    OnChange = miKronkelClick
   end
   object Label4: TLabel
-    Left = 32
-    Height = 35
-    Top = 6
-    Width = 616
+    Left = 40
+    Height = 44
+    Top = 8
+    Width = 770
     Alignment = taCenter
     AutoSize = False
     Caption = 'Fractals'
-    Color = clDefault
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     Font.Style = [fsBold]
@@ -124,8 +122,8 @@ object frmMain: TfrmMain
     ParentFont = False
   end
   object MainMenu1: TMainMenu
-    Left = 58
-    Top = 166
+    Left = 73
+    Top = 208
     object miFractals: TMenuItem
       Caption = 'Fractals'
       object miBoomH1: TMenuItem
@@ -237,15 +235,21 @@ object frmMain: TfrmMain
         OnClick = miWervelClick
       end
       object miPythb1: TMenuItem
+        AutoCheck = True
         Caption = 'Boom van Pythagoras'
+        RadioItem = True
         OnClick = miPythb1Click
       end
       object miPythb2: TMenuItem
+        AutoCheck = True
         Caption = 'Scheve Pythagorasboom'
+        RadioItem = True
         OnClick = miPythb2Click
       end
       object miPythb3: TMenuItem
+        AutoCheck = True
         Caption = 'Pythagorasboom, Backtrack methode'
+        RadioItem = True
         OnClick = miPythb3Click
       end
     end

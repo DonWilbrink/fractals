@@ -344,7 +344,7 @@ end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   Height := 800;
-  Width := 900;
+  Width := 1000;
   Clear;
 end;
 
