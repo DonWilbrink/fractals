@@ -12,7 +12,6 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnResize = FormResize
   Position = poScreenCenter
-  LCLVersion = '3.0.0.3'
   object pbMain: TPaintBox
     Left = 40
     Height = 675
@@ -32,12 +31,11 @@ object frmMain: TfrmMain
     Visible = False
   end
   object Label1: TLabel
-    Left = 838
+    Left = 837
     Height = 20
-    Top = 32
-    Width = 116
+    Top = 24
+    Width = 44
     Anchors = [akTop, akRight]
-    AutoSize = False
     Caption = 'Label1'
     ParentColor = False
     Visible = False
@@ -252,6 +250,12 @@ object frmMain: TfrmMain
         Caption = 'Pythagorasboom, Backtrack methode'
         RadioItem = True
         OnClick = miPythb3Click
+      end
+      object miPytht: TMenuItem
+        AutoCheck = True
+        Caption = 'Kale pythagorasboom'
+        RadioItem = True
+        OnClick = miPythtClick
       end
     end
   end

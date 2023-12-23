@@ -20,6 +20,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     MainMenu1: TMainMenu;
+    miPytht: TMenuItem;
     miPythb3: TMenuItem;
     miPythb2: TMenuItem;
     miPythb1: TMenuItem;
@@ -64,6 +65,7 @@ type
     procedure miPythb1Click(Sender: TObject);
     procedure miPythb2Click(Sender: TObject);
     procedure miPythb3Click(Sender: TObject);
+    procedure miPythtClick(Sender: TObject);
     procedure miSierClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
@@ -338,6 +340,7 @@ begin
     18: miPythb1Click(Self);
     19: miPythb2Click(Self);
     20: miPythb3Click(Self);
+    21: miPythtClick(Self);
   end;
 end;
 
@@ -1258,6 +1261,66 @@ begin
     u1[s1-1] := u2[s1-1];
     v1[s1-1] := v2[s1-1];
     Tekenboom;
+  end;
+end;
+
+procedure TfrmMain.miPythtClick(Sender: TObject);
+var
+  a1, a2, b1, b2, c, c1, c2, d1, d2, f, s, u, v, x0, x1, xa, xb, xc, xd, y0, y1, ya, yb, yc, yd: Double;
+  x, y: Array[0..4096] of Double;
+  j, m: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Kale pythagorasboom';
+  MinMaxPercNegYfToSmallestFactShift(-3.5,4.5,-4.5,4,0.05,False);
+  f := pi/4;
+  c := Cos(f);
+  s := Sin(f);
+  a1 := c*s;
+  a2 := Power(c,2);
+  b1 := a1+a2;
+  b2 := a1+a2;
+  c1 := b2;
+  c2 := 1-b1;
+  d1 := 1-a1;
+  d2 := 1-a2;
+  x[2] := 0;
+  y[2] := 0;
+  x[3] := 1;
+  y[3] := 0;
+  pbMain.Canvas.Line(Trunc(xs+xf*0.5),Trunc(ys+yf*-1),Trunc(xs+xf*0.5),Trunc(ys));
+  for m := 1 to 10 do
+  begin
+    for j := 0 to Round(Power(2,m-1)-1) do
+    begin
+      x0 := x[Round(Power(2,m)+2*j)];
+      y0 := y[Round(Power(2,m)+2*j)];
+      x1 := x[Round(Power(2,m)+2*j+1)];
+      y1 := y[Round(Power(2,m)+2*j+1)];
+      u := x1-x0;
+      v := y1-y0;
+      xa := x0+a1*u-a2*v;
+      ya := y0+a2*u+a1*v;
+      xb := x0+b1*u-b2*v;
+      yb := y0+b2*u+b1*v;
+      xc := x0+c1*u-c2*v;
+      yc := y0+c2*u+c1*v;
+      xd := x0+d1*u-d2*v;
+      yd := y0+d2*u+d1*v;
+      x[Round(Power(2,m+1)+4*j)] := xa;
+      y[Round(Power(2,m+1)+4*j)] := ya;
+      x[Round(Power(2,m+1)+4*j+1)] := xb;
+      y[Round(Power(2,m+1)+4*j+1)] := yb;
+      x[Round(Power(2,m+1)+4*j+2)] := xc;
+      y[Round(Power(2,m+1)+4*j+2)] := yc;
+      x[Round(Power(2,m+1)+4*j+3)] := xd;
+      y[Round(Power(2,m+1)+4*j+3)] := yd;
+      with pbMain.Canvas do
+      begin
+        Line(Trunc(xs+xf*((x0+x1)/2)),Trunc(ys+yf*((y0+y1)/2)),Trunc(xs+xf*((xa+xb)/2)),Trunc(ys+yf*((ya+yb)/2)));
+        Line(Trunc(xs+xf*((x0+x1)/2)),Trunc(ys+yf*((y0+y1)/2)),Trunc(xs+xf*((xc+xd)/2)),Trunc(ys+yf*((yc+yd)/2)));
+      end;
+    end;
   end;
 end;
 
