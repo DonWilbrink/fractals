@@ -20,6 +20,8 @@ type
     Label3: TLabel;
     Label4: TLabel;
     MainMenu1: TMainMenu;
+    miSterfractal: TMenuItem;
+    miBoomm: TMenuItem;
     miPytht: TMenuItem;
     miPythb3: TMenuItem;
     miPythb2: TMenuItem;
@@ -53,6 +55,7 @@ type
     procedure miBoom3Click(Sender: TObject);
     procedure miBoomH1Click(Sender: TObject);
     procedure miBoomH2Click(Sender: TObject);
+    procedure miBoommClick(Sender: TObject);
     procedure miDraak0Click(Sender: TObject);
     procedure miDraak1Click(Sender: TObject);
     procedure miDraakClick(Sender: TObject);
@@ -67,6 +70,7 @@ type
     procedure miPythb3Click(Sender: TObject);
     procedure miPythtClick(Sender: TObject);
     procedure miSierClick(Sender: TObject);
+    procedure miSterfractalClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
     procedure SpinEdit1Change(Sender: TObject);
@@ -341,6 +345,8 @@ begin
     19: miPythb2Click(Self);
     20: miPythb3Click(Self);
     21: miPythtClick(Self);
+    22: miBoommClick(Self);
+    23: miSterfractalClick(Self);
   end;
 end;
 
@@ -383,6 +389,117 @@ begin
     y3[s-1] := y4[s-1];
     Teken;
   end;
+end;
+
+procedure TfrmMain.miBoommClick(Sender: TObject);
+var
+  m,n,p,s: Integer;
+  x1,y1,x2,y2,u1,v1,u2,v2: Array[0..11] of Double;
+  r1,r2,a,b,a1,a2,b1,b2,e1,e2,f1,f2,c1,c2,d1,d2,h: Double;
+
+  procedure Gosub210;
+  var
+    j: Integer;
+    X,Y,U,V,X3,Y3,U3,U4,V3,V4 : double;
+  begin
+    FOR J:=S TO P do
+    begin
+      X:=X1[J-1];
+      Y:=Y1[J-1];
+      U:=U1[J-1];
+      V:=V1[J-1];
+      X3:=U-X;
+      Y3:=V-Y;
+      X1[J]:=X+A1*X3-A2*Y3;
+      Y1[J]:=Y+A2*X3-A1*Y3;
+      U1[J]:=X+B1*X3-B2*Y3;
+      V1[J]:=Y+B2*X3+B1*Y3;
+      X2[J]:=X+E1*X3-E2*Y3;
+      Y2[J]:=Y+E2*X3+E1*Y3;
+      U2[J]:=X+F1*X3-F2*Y3;
+      V2[J]:=Y+F2*X3+F1*Y3;
+      U3:=X+C1*X3-C2*Y3;
+      V3:=Y+C2*X3+C1*Y3;
+      U4:=X+D1*X3-D2*Y3;
+      V4:=Y+D2*X3+D1*Y3;
+      IF J=S THEN
+      begin
+        H :=A2;
+        A2:=F2;
+        F2:= H;
+        H :=B2;
+        B2:=E2;
+        E2:= H;
+        H :=C2;
+        C2:=D2;
+        D2:= H;
+      end;
+      with pbMain.Canvas do
+      begin
+        Line(Trunc(xs+xf*X),Trunc(ys+yf*Y),Trunc(xs+xf*X1[J]),Trunc(ys+yf*Y1[J]));  // left side of stem (repeating in 1 continuous line)
+        Line(Trunc(xs+xf*U1[J]),Trunc(ys+yf*V1[J]),Trunc(xs+xf*U3),Trunc(ys+yf*V3)); // lower left horz part of Z
+        LineTo(Trunc(xs+xf*U4),Trunc(ys+yf*V4)); // middle vert part of Z
+        LineTo(Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j]));
+        Line(Trunc(xs+xf*u2[j]),Trunc(ys+yf*v2[j]),Trunc(xs+xf*u),Trunc(ys+yf*v));
+      end;
+    end;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Boom van Mandelbrot, backtrackmethode';
+  pbMain.Canvas.Pen.Width := 2;
+  MinMaxPercNegYfToSmallestFactShift(-9.5,10.5,-3,12,0.05,True);
+  p := 11;
+  r1 := 0.72;
+  r2 := 0.67;
+  a := 3.98;
+  b := 4.38;
+  a1 := 0;
+  a2 := a;
+  b1 := 0;
+  b2 := a+r1;
+  e1 := 1;
+  e2 := b+r2;
+  f1 := 1;
+  f2 := b;
+  c1 := 0.5;
+  c2 := b2;
+  d1 := 0.5;
+  d2 := e2;
+  x1[0] := 0;
+  y1[0] := 0;
+  u1[0] := 1;
+  v1[0] := 0;
+  pbMain.Canvas.Line(Trunc(xs),Trunc(ys),Trunc(xs+xf),Trunc(ys));
+  s := 1;
+  Gosub210;
+  for m := 1 to Trunc(Power(2,p-1)-1) do
+  begin
+    s := p;
+    n := m;
+    while n mod 2 = 0 do
+    begin
+      n := n div 2;
+      s := s-1;
+    end;
+    h := a2;
+    a2 := f2;
+    f2 := h;
+    h := b2;
+    b2 := e2;
+    e2 := h;
+    h := c2;
+    c2 := d2;
+    d2 := h;
+    x1[s-1] := x2[s-1];
+    y1[s-1] := y2[s-1];
+    u1[s-1] := u2[s-1];
+    v1[s-1] := v2[s-1];
+    Gosub210;
+  end;
+  pbMain.Canvas.Brush.Color := clGreen;
+  pbMain.Canvas.FloodFill(Trunc(xs+xf*0.5),Trunc(ys+yf*0.5),clBlack,fsBorder);
 end;
 
 procedure TfrmMain.miDraak0Click(Sender: TObject);
@@ -1272,14 +1389,14 @@ var
 begin
   Clear;
   Label4.Caption := 'Kale pythagorasboom';
-  MinMaxPercNegYfToSmallestFactShift(-3.5,4.5,-4.5,4,0.05,False);
+  MinMaxPercNegYfToSmallestFactShift(-3.5,4.5,-2,4,0.05,True);
   f := pi/4;
   c := Cos(f);
   s := Sin(f);
-  a1 := c*s;
+  a1 := -c*s;
   a2 := Power(c,2);
   b1 := a1+a2;
-  b2 := a1+a2;
+  b2 := -a1+a2;
   c1 := b2;
   c2 := 1-b1;
   d1 := 1-a1;
@@ -1367,6 +1484,38 @@ begin
         LineTo(Trunc(xs+xf*u1),Trunc(ys+yf*v1));
       end;
     end;
+  end;
+end;
+
+procedure TfrmMain.miSterfractalClick(Sender: TObject);
+var
+  f,m,n,p,v: Integer;
+  a,b,r,x,y: Double;
+begin
+  Clear;
+  Label4.Caption := 'Sterfractal';
+  MinMaxPercNegYfToSmallestFactShift(-0.5,1.5,-0.8,0.7,0.05,True);
+  p := 5;
+  v := 4;
+  a := 144;
+  r := 0.35;
+  a := a*pi/180;
+  pbMain.Canvas.MoveTo(Trunc(xs),Trunc(ys));
+  x := 0;
+  y := 0;
+  for n := 0 to Trunc((v+1)*Power(v,p-1)-1) do
+  begin
+    m := n;
+    b := n*a;
+    f := 0;
+    while (m mod v=0) and (f<p-1) do
+    begin
+      f := f+1;
+      m := m div v;
+    end;
+    x := x+Power(r,(p-f-1))*Cos(b);
+    y := y+Power(r,(p-f-1))*Sin(b);
+    pbMain.Canvas.LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
   end;
 end;
 
