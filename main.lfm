@@ -267,6 +267,36 @@ object frmMain: TfrmMain
         Caption = 'Sterfractal'
         OnClick = miSterfractalClick
       end
+      object miStofb: TMenuItem
+        AutoCheck = True
+        Caption = 'Stoffractal backtrack methode'
+        RadioItem = True
+        OnClick = miStofbClick
+      end
+      object miStofbt: TMenuItem
+        AutoCheck = True
+        Caption = 'Stoffractal backtrackmethode, drietallig'
+        RadioItem = True
+        OnClick = miStofbtClick
+      end
+      object miStofa: TMenuItem
+        AutoCheck = True
+        Caption = 'Stoffractal, varia, Monte Carlo methode'
+        RadioItem = True
+        OnClick = miStofaClick
+      end
+      object miStof: TMenuItem
+        AutoCheck = True
+        Caption = 'Stoffractal, Monte Carlo methode'
+        RadioItem = True
+        OnClick = miStofClick
+      end
+      object miMondriaan: TMenuItem
+        AutoCheck = True
+        Caption = 'Moderne kunst'
+        RadioItem = True
+        OnClick = miMondriaanClick
+      end
     end
   end
 end

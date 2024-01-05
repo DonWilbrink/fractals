@@ -20,6 +20,11 @@ type
     Label3: TLabel;
     Label4: TLabel;
     MainMenu1: TMainMenu;
+    miMondriaan: TMenuItem;
+    miStof: TMenuItem;
+    miStofa: TMenuItem;
+    miStofbt: TMenuItem;
+    miStofb: TMenuItem;
     miSterfractal: TMenuItem;
     miBoomm: TMenuItem;
     miPytht: TMenuItem;
@@ -65,12 +70,17 @@ type
     procedure miLevyClick(Sender: TObject);
     procedure miLogspiraClick(Sender: TObject);
     procedure miMinkClick(Sender: TObject);
+    procedure miMondriaanClick(Sender: TObject);
     procedure miPythb1Click(Sender: TObject);
     procedure miPythb2Click(Sender: TObject);
     procedure miPythb3Click(Sender: TObject);
     procedure miPythtClick(Sender: TObject);
     procedure miSierClick(Sender: TObject);
     procedure miSterfractalClick(Sender: TObject);
+    procedure miStofaClick(Sender: TObject);
+    procedure miStofbClick(Sender: TObject);
+    procedure miStofbtClick(Sender: TObject);
+    procedure miStofClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
     procedure SpinEdit1Change(Sender: TObject);
@@ -347,6 +357,10 @@ begin
     21: miPythtClick(Self);
     22: miBoommClick(Self);
     23: miSterfractalClick(Self);
+    24: miStofbClick(Self);
+    25: miStofbtClick(Self);
+    26: miStofaClick(Self);
+    27: miStofClick(Self);
   end;
 end;
 
@@ -1165,6 +1179,32 @@ begin
   end;
 end;
 
+procedure TfrmMain.miMondriaanClick(Sender: TObject);
+var
+  h,k,x,y: Double;
+  n: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Moderne kunst';
+  MinMaxPercNegYfToSmallestFactShift(-0.3,1.3,-0.1,1.1,0.05,True);
+  Randomize;
+  h := 0.1;
+  pbMain.Canvas.Line(Trunc(xs),Trunc(ys),Trunc(xs+xf),Trunc(ys));
+  pbMain.Canvas.LineTo(Trunc(xs+xf),Trunc(ys+yf));
+  pbMain.Canvas.LineTo(Trunc(xs),Trunc(ys+yf));
+  pbMain.Canvas.LineTo(Trunc(xs),Trunc(ys));
+  for n := 1 to 100 do
+  begin
+    x := 0.8*Round(Random(100))/100+0.1;
+    y := 0.8*Round(Random(100))/100+0.1;
+    k := h*(1-Sqrt(Random));
+    if Random > 0.5 then
+      pbMain.Canvas.Line(Trunc(xs+xf*(x-k)),Trunc(ys+yf*y),Trunc(xs+xf*(x+k)),Trunc(ys+yf*y))
+    else
+      pbMain.Canvas.Line(Trunc(xs+xf*x),Trunc(ys+yf*(y-k)),Trunc(xs+xf*x),Trunc(ys+yf*(y+k)));
+  end;
+end;
+
 procedure TfrmMain.miPythb1Click(Sender: TObject);
 var
   j, k, l, m, n, p: Integer;
@@ -1516,6 +1556,207 @@ begin
     x := x+Power(r,(p-f-1))*Cos(b);
     y := y+Power(r,(p-f-1))*Sin(b);
     pbMain.Canvas.LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
+  end;
+end;
+
+procedure TfrmMain.miStofaClick(Sender: TObject);
+var
+  a,b,c,r,x,y,z: Double;
+  k: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Stoffractal, varia, Monte Carlo methode';
+  MinMaxPercNegYfToSmallestFactShift(-0.5,1,-0.866,0.866,0.05,False);
+  Randomize;
+  r := 1;
+  a := r*Cos(2*pi/3);
+  b := r*Sin(2*pi/3);
+  c := 2.75;
+  x := 1;
+  y := 0;
+  for k := 1 to 10000 do
+  begin
+    if Random < 0.5 then
+    begin
+      z := x;
+      x := a*x-b*y;
+      y := b*z+a*y;
+      {z := x;
+      x := x/2+y;
+      y := -z-y/2;}
+      {z := -x;
+      x := y/2;
+      y := z+y;}
+    end
+    else
+    begin
+      z := x;
+      x := (x*x-y*y+c-1)/c;
+      y := 2*z*y/c;
+    end;
+    pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := clBlue;
+  end;
+end;
+
+procedure TfrmMain.miStofbClick(Sender: TObject);
+var
+  a,b,c,d,x,y: Double;
+  n,m,p, s: Integer;
+  x1,y1,x2,y2: Array [0..12] of Double;
+
+  procedure Gosub150;
+  var
+    j: Integer;
+  begin
+    for j := s to p do
+    begin
+      x := x1[j-1];
+      y := y1[j-1];
+      x1[j] := a*x-b*y;
+      y1[j] := b*x+a*y; // rotatie
+      x2[j] := c*x-d*y+1-c;
+      y2[j] := d*x+c*y-d; // rotatie
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j])] := clBlue;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j])] := clBlue;
+    end;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Stoffractal backtrack methode';
+  MinMaxPercNegYfToSmallestFactShift(-1.5,2.5,-1.3,1.7,0.05,True);
+  a := 0;
+  b := 0.7071;
+  c := 0.5;
+  d := -0.5;
+  p := 12;
+  pbMain.Canvas.Pixels[Trunc(xs),Trunc(ys)] := clBlue;
+  pbMain.Canvas.Pixels[Trunc(xs+xf*1),Trunc(ys)] := clBlue;
+  x1[0] := a;
+  y1[0] := b;
+  pbMain.Canvas.Pixels[Trunc(xs+xf*x1[0]),Trunc(ys+yf*y1[0])] := clBlue;
+  s := 1;
+  Gosub150;
+  for m := 1 to Trunc(Power(2,p-1)-1) do
+  begin
+    s := p;
+    n := m;
+    while n mod 2 = 0 do
+    begin
+      n := n div 2;
+      s := s-1;
+      x1[s-1] := x2[s-1];
+      y1[s-1] := y2[s-1];
+      Gosub150;
+    end;
+  end;
+end;
+
+procedure TfrmMain.miStofbtClick(Sender: TObject);
+var
+  m,n,p,s: Integer;
+  x1,x2,x3,y1,y2,y3: Array [0..7] of Double;
+  a,b,c,d,e,f,g,h,t1,t2: Double;
+
+  procedure Goto150;
+  var
+    j: Integer;
+  begin
+    for j := s to p do
+    begin
+      x := x1[j-1];
+      y := y1[j-1];
+      x1[j] := a*x-b*y;
+      y1[j] := b*x+a*y;
+      x2[j] := c*x-d*y+1-c;
+      y2[j] := d*x+c*y-d;
+      x3[j] := e*x-f*y+g;
+      y3[j] := f*x+e*y+h;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j])] := clBlue;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j])] := clBlue;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x3[j]),Trunc(ys+yf*y3[j])] := clBlue;
+    end;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Stoffractal backtrack methode, drietallig';
+  MinMaxPercNegYfToSmallestFactShift(-0.8,1.6,-0.6,1.2,0.05,True);
+  p := 7;
+  t1 := 0.5;
+  t2 := 0.866; // positie top
+  a := 0.43;
+  b := 0.3;
+  c := a;
+  d := b;
+  e := a;
+  f := b;
+  g := t1*(1-e)+t2*f;
+  h := t1*f+t2*(1-e);
+  x1[0] := 0.5;
+  y1[0] := 0.289;
+  with pbMain.Canvas do
+  begin
+    Pixels[Trunc(xs),Trunc(ys)] := clBlue;
+    Pixels[Trunc(xs+xf*1),Trunc(ys)] := clBlue;
+    Pixels[Trunc(xs+xf*t1),Trunc(ys+yf*t2)] := clBlue;
+    Pixels[Trunc(xs+xf*x1[0]),Trunc(ys+yf*y1[0])] := clBlue;
+  end;
+  for m := 0 to Trunc(Power(3,p-1)-1) do
+  begin
+    s := p;
+    n := m;
+    if m = 0 then
+    begin
+      s := 1;
+      Goto150;
+      Continue;
+    end;
+    while n mod 3 = 0 do
+    begin
+      n := n div 3;
+      s := s-1;
+    end;
+    x1[s-1] := x2[s-1];
+    y1[s-1] := y2[s-1];
+    x2[s-1] := x3[s-1];
+    y2[s-1] := y3[s-1];
+    Goto150;
+  end;
+end;
+
+procedure TfrmMain.miStofClick(Sender: TObject);
+var
+  a,b,c,d,r1,r2,x,y,z: Double;
+  k: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Stoffractal, Monte Carlo methode';
+  MinMaxPercNegYfToSmallestFactShift(-1.1,2.1,-1.2,1.2,0.05,True);
+  Randomize;
+  r1 := 0.6;
+  r2 := 0.6;
+  a := r1*Cos(2*pi/3);
+  b := r1*Sin(2*pi/3);
+  c := r2*Cos(2*pi/3);
+  d := -r2*Sin(2*pi/3);
+  x := a;
+  y := b;
+  for k := 1 to 10000 do
+  begin
+    if Random < 0.5 then
+    begin
+      z := x;
+      x := a*x-b*y;
+      y := b*z+a*y;
+    end
+    else
+    begin
+      z := x;
+      x := c*x-d*y+1-c;
+      y := d*z+a*y-d;
+    end;
+    pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := clBlue;;
   end;
 end;
 
