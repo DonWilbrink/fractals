@@ -11,6 +11,7 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnResize = FormResize
   Position = poScreenCenter
+  LCLVersion = '3.0.0.3'
   object pbMain: TPaintBox
     Left = 32
     Height = 540
@@ -296,6 +297,24 @@ object frmMain: TfrmMain
         Caption = 'Moderne kunst'
         RadioItem = True
         OnClick = miMondriaanClick
+      end
+      object miPythbs: TMenuItem
+        AutoCheck = True
+        Caption = 'Pythagorasboom, backtrackmethode'
+        RadioItem = True
+        OnClick = miPythbsClick
+      end
+      object miBrownl: TMenuItem
+        AutoCheck = True
+        Caption = 'Brownse lijn'
+        RadioItem = True
+        OnClick = miBrownlClick
+      end
+      object miCollet: TMenuItem
+        AutoCheck = True
+        Caption = 'Bifurcatiediagram x:=ax(1-x)'
+        RadioItem = True
+        OnClick = miColletClick
       end
     end
   end

@@ -20,6 +20,9 @@ type
     Label3: TLabel;
     Label4: TLabel;
     MainMenu1: TMainMenu;
+    miCollet: TMenuItem;
+    miBrownl: TMenuItem;
+    miPythbs: TMenuItem;
     miMondriaan: TMenuItem;
     miStof: TMenuItem;
     miStofa: TMenuItem;
@@ -61,6 +64,8 @@ type
     procedure miBoomH1Click(Sender: TObject);
     procedure miBoomH2Click(Sender: TObject);
     procedure miBoommClick(Sender: TObject);
+    procedure miBrownlClick(Sender: TObject);
+    procedure miColletClick(Sender: TObject);
     procedure miDraak0Click(Sender: TObject);
     procedure miDraak1Click(Sender: TObject);
     procedure miDraakClick(Sender: TObject);
@@ -74,6 +79,7 @@ type
     procedure miPythb1Click(Sender: TObject);
     procedure miPythb2Click(Sender: TObject);
     procedure miPythb3Click(Sender: TObject);
+    procedure miPythbsClick(Sender: TObject);
     procedure miPythtClick(Sender: TObject);
     procedure miSierClick(Sender: TObject);
     procedure miSterfractalClick(Sender: TObject);
@@ -89,7 +95,7 @@ type
     procedure Clear;
     procedure MinMaxPercNegYfToSmallestFactShift(xlo,xhi,ylo,yhi,perc : double; NegYf : boolean);
     procedure MinMaxPercXPercYToFactShift(xlo, xhi, ylo, yhi, PercX,PercY: double; NegYf: boolean);
-
+    procedure MinMaxPercXPercYNegXfNegYfToFactShift(xlo, xhi, ylo, yhi, PercX,PercY: double; NegXf,NegYf : boolean);
   public
 
   end;
@@ -126,7 +132,8 @@ begin
   ys:=pbMain.Height/2-(ylo+(yhi-ylo)/2)*yf;      // middle value -> midscreen vert
 end;
 
-procedure TfrmMain.MinMaxPercXPercYToFactShift(xlo, xhi, ylo, yhi, PercX,PercY: double; NegYf: Boolean);
+procedure TfrmMain.MinMaxPercXPercYToFactShift(xlo, xhi, ylo, yhi, PercX,
+  PercY: double; NegYf: boolean);
 begin
   // xf * xlo + xs =      percx  * ImgW
   // xf * xhi + xs = (1-  percx) * ImgW
@@ -140,6 +147,29 @@ begin
   if NegYf then yf:=-yf;
   xs:=percx*pbMain.Width - xf*xlo;               // from first x equation
   ys:=percy*pbMain.Height- yf*ylo;               // from first y equation
+end;
+
+procedure TfrmMain.MinMaxPercXPercYNegXfNegYfToFactShift(xlo, xhi, ylo, yhi,
+  PercX, PercY: double; NegXf, NegYf: boolean);
+begin
+  // xf * xlo + xs =      percx  * ImgW
+  // xf * xhi + xs = (1-  percx) * ImgW
+  // xf *(xhi-xlo) = (1-2*percx) * ImgW
+  xf:=(1-2*percx)*pbMain.Canvas.Width/(xhi-xlo);        // subtract to eliminate xs
+
+  if NegXf then xf:=-xf;
+
+  // yf * ylo + ys =      percy  * ImgH
+  // yf * yhi + ys = (1 - percy) * ImgH
+  // yf *(yhi-ylo) = (1-2*percy) * ImgH
+  yf:=(1-2*percy)*pbMain.Canvas.Height/(yhi-ylo);       // subtract to eliminate ys
+
+  if NegYf then yf:=-yf;
+
+  //xs:=percx*Image1.Width - xf*xlo;                 // from first x equation, no longer valid !!!
+  xs:=(pbMain.Canvas.Width-xf*(xhi+xlo))/2;               // from adding the 2 x-equations
+  //ys:=percy*Image1.Height- yf*ylo;                 // from first y equation, no longer valid !!!
+  ys:=(pbMain.Canvas.Height-yf*(yhi+ylo))/2;              // from adding the 2 y-equations
 end;
 
 procedure TfrmMain.miBoomH1Click(Sender: TObject);
@@ -361,6 +391,10 @@ begin
     25: miStofbtClick(Self);
     26: miStofaClick(Self);
     27: miStofClick(Self);
+    28: miMondriaanClick(Self);
+    29: miPythbsClick(Self);
+    30: miBrownlClick(Self);
+    31: miColletClick(Self);
   end;
 end;
 
@@ -369,6 +403,7 @@ begin
   Height := 800;
   Width := 1000;
   Clear;
+  Randomize;
 end;
 
 procedure TfrmMain.miBoomH2Click(Sender: TObject);
@@ -514,6 +549,48 @@ begin
   end;
   pbMain.Canvas.Brush.Color := clGreen;
   pbMain.Canvas.FloodFill(Trunc(xs+xf*0.5),Trunc(ys+yf*0.5),clBlack,fsBorder);
+end;
+
+procedure TfrmMain.miBrownlClick(Sender: TObject);
+var
+  w,x,y: Double;
+  k: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Brownse lijn';
+  MinMaxPercNegYfToSmallestFactShift(-1.2,1.2,-0.9,0.9,0.05,True);
+  w := 40;
+  y := 0;
+  pbMain.Canvas.Line(Trunc(xs+xf),Trunc(ys),Trunc(xs-xf),Trunc(ys));
+  for k := 0 to 2000 do
+  begin
+    x := -1+k/1000;
+    y := y+w*(Random-0.5)/2000;
+    pbMain.Canvas.LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
+  end;
+end;
+
+procedure TfrmMain.miColletClick(Sender: TObject);
+var
+  k,n,w: Integer;
+  a,x: Double;
+begin
+  Clear;
+  Label4.Caption := 'Bifurcatiediagram x:=ax(1-x)';
+  //MinMaxPercNegYfToSmallestFactShift(0,1,0,1,0.05,True);
+  w := pbMain.Canvas.Width;
+  MinMaxPercXPercYNegXfNegYfToFactShift(0,w,0,1,0.05,0.005,False,True);
+  //h := pbMain.Canvas.Height;
+  for n := 0 to w-1 do
+  begin
+    a := 2.8+1.2*n/(w-1);
+    x := 0.7;
+    for k := 1 to 400 do
+    begin
+      x := a*x*(1-x);
+      if k>100 then pbMain.Canvas.Pixels[Trunc(xs+xf*n),Trunc(ys+yf*x)] := clBlack;
+    end;
+  end;
 end;
 
 procedure TfrmMain.miDraak0Click(Sender: TObject);
@@ -1418,6 +1495,92 @@ begin
     u1[s1-1] := u2[s1-1];
     v1[s1-1] := v2[s1-1];
     Tekenboom;
+  end;
+end;
+
+procedure TfrmMain.miPythbsClick(Sender: TObject);
+var
+  m,n,p,s: Integer;
+  a1,a2,b1,b2,c1,c2,w,u,v,x,x3,y,y3: Double;
+  x1,y1,x2,y2,u1,v1,u2,v2: Array [0..12] of Double;
+
+  procedure Gosub260;
+  begin
+    a2 := a2*(1+(Random-0.5)*w);
+    c2 := c2*(1+(Random-0.5)*w);
+    b2 := (a2+c2)/2+0.5;
+  end;
+
+  procedure Gosub160;
+  var
+    j: Integer;
+    //: Double;
+  begin
+    for j := s to p do
+    begin
+      x := x1[j-1];
+      y := y1[j-1];
+      u := u1[j-1];
+      v := v1[j-1];
+      x3 := u-x;
+      y3 := v-y;
+      x1[j] := x+a1*x3-a2*y3;
+      y1[j] := y+a2*x3+a1*y3;
+      u1[j] := x+b1*x3-b2*y3;
+      v1[j] := y+b2*x3+b1*y3;
+      x2[j] := u1[j];
+      y2[j] := v1[j];
+      u2[j] := x+c1*x3-c2*y3;
+      v2[j] := y+c2*x3+c1*y3;
+      with pbMain.Canvas do
+      begin
+        Line(Trunc(xs+xf*x),Trunc(ys+yf*y),Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j]));
+        Line(Trunc(xs+xf*u1[j]),Trunc(ys+yf*v1[j]),Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j]));
+        Line(Trunc(xs+xf*u2[j]),Trunc(ys+yf*v2[j]),Trunc(xs+xf*u),Trunc(ys+yf*v));
+      end;
+    end;
+  end;
+
+  procedure Gosub140;
+  begin
+    x1[s-1] := x2[s-1];
+    y1[s-1] := y2[s-1];
+    u1[s-1] := u2[s-1];
+    v1[s-1] := v2[s-1];
+    Gosub160;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Pythagorasboom, backtrackmethode';
+  MinMaxPercNegYfToSmallestFactShift(-9.5,10.5,-3,12,0.05,True);
+  w := 0.15;
+  p := 11;
+  a1 := 0;
+  a2 := 3;
+  b1 := 0.5;
+  b2 := 3.5;
+  c1 := 1;
+  c2 := 3;
+  x1[0] := 0;
+  y1[0] := 0;
+  u1[0] := 1;
+  v1[0] := 0;
+  pbMain.Canvas.Line(Trunc(xs),Trunc(ys),Trunc(xs+xf),Trunc(ys));
+  s := 1;
+  Gosub260;
+  Gosub160;
+  for m := 1 to Trunc(Power(2,(p-1))-1) do
+  begin
+    s := p;
+    n := m;
+    if s<5 then Gosub260;
+    while n mod 2 = 0 do
+    begin
+      n := n div 2;
+      s := s-1;
+    end;
+    Gosub140;
   end;
 end;
 
