@@ -11,7 +11,6 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnResize = FormResize
   Position = poScreenCenter
-  LCLVersion = '3.0.0.3'
   object pbMain: TPaintBox
     Left = 32
     Height = 540
@@ -121,8 +120,26 @@ object frmMain: TfrmMain
     ParentColor = False
     ParentFont = False
   end
+  object Label5: TLabel
+    Left = 670
+    Height = 15
+    Top = 248
+    Width = 34
+    Anchors = [akTop, akRight]
+    Caption = 'Label5'
+  end
+  object SpinEdit2: TSpinEdit
+    Left = 672
+    Height = 23
+    Top = 280
+    Width = 94
+    Anchors = [akTop, akRight]
+    OnChange = SpinEdit2Change
+    TabOrder = 3
+    Value = 100
+  end
   object MainMenu1: TMainMenu
-    Left = 58
+    Left = 56
     Top = 166
     object miFractals: TMenuItem
       Caption = 'Fractals'
@@ -315,6 +332,36 @@ object frmMain: TfrmMain
         Caption = 'Bifurcatiediagram x:=ax(1-x)'
         RadioItem = True
         OnClick = miColletClick
+      end
+      object miHenon: TMenuItem
+        AutoCheck = True
+        Caption = 'Banen van Henon''s Quadratisch Systeem'
+        RadioItem = True
+        OnClick = miHenonClick
+      end
+      object miMira: TMenuItem
+        AutoCheck = True
+        Caption = 'Banen van Mira''s algemeen systeem'
+        RadioItem = True
+        OnClick = miMiraClick
+      end
+      object miJuliab: TMenuItem
+        AutoCheck = True
+        Caption = 'Julia fractal van Z:=Z^2+C'
+        RadioItem = True
+        OnClick = miJuliabClick
+      end
+      object miMandel: TMenuItem
+        AutoCheck = True
+        Caption = 'Mandelbrot set'
+        RadioItem = True
+        OnClick = miMandelClick
+      end
+      object miWolk: TMenuItem
+        AutoCheck = True
+        Caption = 'Banen van dynamisch systeem'
+        RadioItem = True
+        OnClick = miWolkClick
       end
     end
   end

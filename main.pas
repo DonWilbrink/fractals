@@ -19,7 +19,13 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     MainMenu1: TMainMenu;
+    miWolk: TMenuItem;
+    miMandel: TMenuItem;
+    miJuliab: TMenuItem;
+    miMira: TMenuItem;
+    miHenon: TMenuItem;
     miCollet: TMenuItem;
     miBrownl: TMenuItem;
     miPythbs: TMenuItem;
@@ -55,6 +61,7 @@ type
     miFractals: TMenuItem;
     pbMain: TPaintBox;
     SpinEdit1: TSpinEdit;
+    SpinEdit2: TSpinEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure miArchiClick(Sender: TObject);
@@ -69,12 +76,16 @@ type
     procedure miDraak0Click(Sender: TObject);
     procedure miDraak1Click(Sender: TObject);
     procedure miDraakClick(Sender: TObject);
+    procedure miHenonClick(Sender: TObject);
+    procedure miJuliabClick(Sender: TObject);
     procedure miKamClick(Sender: TObject);
     procedure miKochClick(Sender: TObject);
     procedure miKronkelClick(Sender: TObject);
     procedure miLevyClick(Sender: TObject);
     procedure miLogspiraClick(Sender: TObject);
+    procedure miMandelClick(Sender: TObject);
     procedure miMinkClick(Sender: TObject);
+    procedure miMiraClick(Sender: TObject);
     procedure miMondriaanClick(Sender: TObject);
     procedure miPythb1Click(Sender: TObject);
     procedure miPythb2Click(Sender: TObject);
@@ -89,7 +100,9 @@ type
     procedure miStofClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
+    procedure miWolkClick(Sender: TObject);
     procedure SpinEdit1Change(Sender: TObject);
+    procedure SpinEdit2Change(Sender: TObject);
   private
     procedure Teken;
     procedure Clear;
@@ -105,8 +118,15 @@ var
   a, b, c, n, x, y, xf, yf, xs, ys: Double;
   j, m, p, s: Integer;
   x1, x2 , x3, x4, y1, y2, y3, y4: Array[0..4] of Double;
+  EgaColor : array[0..15] of TColor =
+    (TColor($000000),TColor($AA0000),TColor($00AA00),TColor($AAAA00),
+     TColor($0000AA),TColor($AA00AA),TColor($0055AA),TColor($AAAAAA),
+     TColor($555555),TColor($FF5555),TColor($55FF55),TColor($FFFF55),
+     TColor($5555FF),TColor($FF55FF),TColor($55FFFF),TColor($FFFFFF));
 
 implementation
+
+uses invoer;
 
 {$R *.lfm}
 
@@ -395,6 +415,11 @@ begin
     29: miPythbsClick(Self);
     30: miBrownlClick(Self);
     31: miColletClick(Self);
+    32: miHenonClick(Self);
+    33: miMiraClick(Self);
+    34: miJuliabClick(Self);
+    35: miMandelClick(self);
+    36: miWolkClick(Self);
   end;
 end;
 
@@ -688,6 +713,88 @@ begin
     x := x + h * Cos(s*b);
     y := y + h * Sin(s*b);
     pbMain.Canvas.LineTo(Round(xs+xf*x),Round(ys+yf*y));
+  end;
+end;
+
+procedure TfrmMain.miHenonClick(Sender: TObject);
+var
+  a,b,x,y,z: Double;
+  n,p: Integer;
+
+begin
+  Clear;
+  Label4.Caption := 'Banen van Henons Quadratisch Systeem';
+  MinMaxPercNegYfToSmallestFactShift(-1.2,1.2,-0.9,0.9,0.05,True);
+  a := 0.24;
+  b := Sqrt(1-Power(a,2));
+  repeat
+    frmInvoer.ShowModal;
+    x := StrToFloat(frmInvoer.edX.Text);
+    y := StrToFloat(frmInvoer.edY.Text);
+    p := StrToInt(frmInvoer.edP.Text);
+    //if (x=0) and (y=0) and (p=0) then Exit;
+    n := 1;
+    while n <= p do
+    begin
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := clBlack;
+      z := x;
+      x := x*a-(y-Power(x,2))*b;
+      y := z*b+(y-Power(z,2))*a;
+      if Abs(x)+Abs(y)>10 then Break;
+      n := n+1;
+    end;
+  until p=0;
+end;
+
+procedure TfrmMain.miJuliabClick(Sender: TObject);
+var
+  n,p: Integer;
+  r,t,x,y: Double;
+  x1,x2,y1,y2: Array[0..16] of Double;
+
+  procedure gosub130;
+  var
+    j: Integer;
+  begin
+    for j := s to p do
+    begin
+      x := x1[j-1];
+      y := y1[j-1];
+      r := Sqrt(Power(x-a,2)+Power(y-b,2))/2;
+      t := (x-a)/2;
+      x1[j] := Sqrt(r+t);
+      x2[j] := -x1[j];
+      y1[j] := Sqrt(r-t)*Sign(y-b);
+      y2[j] := -y1[j];
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j])] := clBlack;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j])] := clBlack;
+    end;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Julia fractal van Z:=Z^2+C';
+  MinMaxPercNegYfToSmallestFactShift(-2,2,-1.5,1.5,0.05,True);
+  p := 16;
+  a := 0;
+  b := 1;
+  x1[0] := -1.3002;
+  y1[0] := 0.6248;
+  pbMain.Canvas.Pixels[Trunc(xs+xf*x1[0]),Trunc(ys+yf*y1[0])] := clBlack;
+  s := 1;
+  gosub130;
+  for m := 1 to Trunc(Power(2,p-1)-1) do
+  begin
+    s := p;
+    n := m;
+    while n mod 2 = 0 do
+    begin
+      n := n div 2;
+      s := s-1;
+      x1[s-1] := x2[s-1];
+      y1[s-1] := y2[s-1];
+      gosub130;
+    end;
   end;
 end;
 
@@ -1207,6 +1314,40 @@ begin
   end;
 end;
 
+procedure TfrmMain.miMandelClick(Sender: TObject);
+var
+  a,b,p1,p2,p3,p4,x,y,z: Double;
+  i,j,k,n1,n2: Integer;
+begin
+  Clear;
+  Label4.Caption := 'Mandelbrot set';
+  p1 := -2.5;
+  p2 := -1.5;
+  p3 := 1.5;
+  p4 := 1.5;
+  n1 := pbMain.Canvas.Width div 2;
+  n2 := Trunc(0.833*n1*(p4-p2)/(p3-p1));
+  for i := -n1 to n1 do
+  begin
+    a := ((n1-i)*p1+(n1+i)*p3)/(2*n1);
+    for j := 0 to n2 do
+    begin
+      b := ((n2-j)*p2+(n2+j)*p4)/(2*n2);
+      x := a;
+      y := b;
+      for k := 1 to 50 do
+      begin
+        z := x;
+        x := x*x-y*y+a;
+        y := 2*y*z+b;
+        if x*x+y*y > 16 then break;
+      end;
+      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50-j] := EgaColor[k mod 16];
+      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50+j] := EgaColor[k mod 16];
+    end;
+  end;
+end;
+
 procedure TfrmMain.miMinkClick(Sender: TObject);
 var
   k, l, m, n, p, s: Integer;
@@ -1253,6 +1394,30 @@ begin
       3: y := y-h;
     end;
     pbMain.Canvas.LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
+  end;
+end;
+
+procedure TfrmMain.miMiraClick(Sender: TObject);
+var
+  n: Integer;
+  a,b,c,w,x,y,z: Double;
+begin
+  Clear;
+  Label4.Caption := 'Banen van Myra ''s algemeen systeem';
+  MinMaxPercNegYfToSmallestFactShift(-40,40,-30,30,0.05,True);
+  a := 0.31;
+  b := 1;
+  c := 2-2*a;
+  x := 12;
+  y := 0;
+  w := a*x+c*x*x/(1+x*x);
+  for n := 0 to 10000 do
+  begin
+    pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := clBlack;
+    z := x;
+    x := b*y+w;
+    w := a*x+c*x*x/(1+x*x);
+    y := w-z;
   end;
 end;
 
@@ -1977,6 +2142,69 @@ begin
   end;
 end;
 
+procedure TfrmMain.miWolkClick(Sender: TObject);
+var
+  a,b,w,x,y,z: Double;
+  n,p: Integer;
+
+   procedure Gosub170;
+  begin
+    if x > 1 then
+      w := a*x+b*(x-1)
+    else
+      if x < -1 then
+        w := a*x+b*(x+1)
+      else
+      begin
+        case SpinEdit2.Value of
+          110: w := a*x+b*Sin(x);
+          120: w := a*x+b*Cos(x);
+          130: w := a+b*Sin(x);
+          140: w := a+b*Cos(x);
+          150:
+            begin
+              if Abs(x) < 1 then
+                w := a*x
+              else
+                w := b*x+(a-b)/x;
+            end;
+          else
+            w := a*x;
+        end;   // end case
+      end;  //end if
+  end;
+
+begin
+  Clear;
+  Label5.Caption := 'Functies';
+  Label5.Visible := True;
+  SpinEdit2.MinValue := 110;
+  SpinEdit2.MaxValue := 150;
+  SpinEdit2.Increment := 10;
+  SpinEdit2.Visible := True;
+  Label4.Caption := 'Banen van dynamisch systeem';
+  MinMaxPercNegYfToSmallestFactShift(-200,200,-150,150,0.05,True);
+  a := 3.5;
+  b := -3;
+  w := 0;
+  Screen.Cursor := crHourGlass;
+  for p := 1 to 1500 do
+  begin
+    x := 200*Random-200;
+    y := 150*Random-150;
+    Gosub170;
+    for n := 0 to p do
+    begin
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := n*4000*p; //clBlack;
+      z := x;
+      x := y+w;
+      Gosub170;
+      y := w-z;
+    end;
+  end;
+  Screen.Cursor := crDefault;
+end;
+
 procedure TfrmMain.SpinEdit1Change(Sender: TObject);
 var
   i: Integer;
@@ -1990,6 +2218,11 @@ begin
     0: miBoomH1Click(Self);
     10: miDraakClick(Self);
   end;
+end;
+
+procedure TfrmMain.SpinEdit2Change(Sender: TObject);
+begin
+  miWolkClick(Self);
 end;
 
 procedure TfrmMain.Teken;
@@ -2024,7 +2257,9 @@ begin
   Label1.Visible := False;
   Label2.Visible := False;
   Label3.Visible := False;
+  Label5.Visible := False;
   SpinEdit1.Visible := False;
+  SpinEdit2.Visible := False;
   cbbBasisLijn.Visible := False;
   cbbModel.Visible := False;
   pbMain.Canvas.Brush.Color := clWhite;
