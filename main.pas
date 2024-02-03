@@ -21,6 +21,9 @@ type
     Label4: TLabel;
     Label5: TLabel;
     MainMenu1: TMainMenu;
+    miKronkelt: TMenuItem;
+    miWolk2: TMenuItem;
+    miWolk1: TMenuItem;
     miWolk: TMenuItem;
     miMandel: TMenuItem;
     miJuliab: TMenuItem;
@@ -81,6 +84,7 @@ type
     procedure miKamClick(Sender: TObject);
     procedure miKochClick(Sender: TObject);
     procedure miKronkelClick(Sender: TObject);
+    procedure miKronkeltClick(Sender: TObject);
     procedure miLevyClick(Sender: TObject);
     procedure miLogspiraClick(Sender: TObject);
     procedure miMandelClick(Sender: TObject);
@@ -100,6 +104,8 @@ type
     procedure miStofClick(Sender: TObject);
     procedure miWervelClick(Sender: TObject);
     procedure miWikkelClick(Sender: TObject);
+    procedure miWolk1Click(Sender: TObject);
+    procedure miWolk2Click(Sender: TObject);
     procedure miWolkClick(Sender: TObject);
     procedure SpinEdit1Change(Sender: TObject);
     procedure SpinEdit2Change(Sender: TObject);
@@ -420,6 +426,9 @@ begin
     34: miJuliabClick(Self);
     35: miMandelClick(self);
     36: miWolkClick(Self);
+    37: miWolk1Click(Self);
+    38: miWolk2Click(Self);
+    39: miKronkeltClick(Self);
   end;
 end;
 
@@ -884,7 +893,7 @@ procedure TfrmMain.miKronkelClick(Sender: TObject);
 var
   x, y: Array [0..4096] of Double;
   a, b, c, d: Array [0..7] of Double;
-  i, j, k, l, m, m1, m2, n, Pmax, u, v: Integer;
+  i, j, k, l, m, m1, m2, n, u, v: Integer;
   aa, bb, xx, yy, x1, y1: Double;
 begin
   Clear;
@@ -1052,7 +1061,7 @@ begin
       D[3]:= 0;
 
       V:=4;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   // motief 0 naar binnen
@@ -1084,7 +1093,7 @@ begin
       D[3]:= 0;
 
       V:=3;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=2 then
@@ -1103,7 +1112,7 @@ begin
       D[3]:= 0;
 
       V:=3;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=3 then
@@ -1122,7 +1131,7 @@ begin
       D[3]:= 0;
 
       V:=3;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=4 then
@@ -1144,7 +1153,7 @@ begin
       D[4]:= 0;
 
       V:=4;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=5 then
@@ -1166,7 +1175,7 @@ begin
       D[4]:= 0;
 
       V:=4;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=6 then
@@ -1188,7 +1197,7 @@ begin
       D[4]:= 0;
 
       V:=3;
-      Pmax:=9;
+      //Pmax:=9;
     end;
 
   if cbbModel.ItemIndex=7 then
@@ -1219,7 +1228,7 @@ begin
       D[7]:= 0;
 
       V:=4;
-      Pmax:=9;
+      //Pmax:=9;
     end;
   p := 5;
   x[0] := 0;
@@ -1253,6 +1262,66 @@ begin
       xx := aa*x[n]-bb*y[n]+a[m];
       yy := bb*x[n]+aa*y[n]+b[m];
       pbMain.Canvas.LineTo(Trunc(xs+xf*xx),Trunc(ys+yf*yy));
+    end;
+  end;
+end;
+
+procedure TfrmMain.miKronkeltClick(Sender: TObject);
+var
+  i,k,m,n,p,u,v: Integer;
+  ff,ll,s,x0,y0: Double;
+  t: Array[0..5] of Integer;
+  a,b,f,l: Array of Double;
+begin
+  Clear;
+  Label4.Caption := 'Kronkellijn, Talstelselmethode, Kochkruis';
+  Label1.Caption := 'Orde';
+  Label1.Visible := True;
+  SpinEdit1.MinValue := 0;
+  SpinEdit1.MaxValue := 5;
+  SpinEdit1.Visible := True;
+  MinMaxPercNegYfToSmallestFactShift(-1,1,-1,1,0.05,True);
+  p := SpinEdit1.Value;
+  u := 4;
+  a := [2,2,2,2];
+  b := [0,90,180,-90];
+  x0 := -1;
+  y0 := -1;
+  for i := 0 to u-1 do
+    b[i] := b[i]*pi/180;
+  v := 4;
+  l := [1,1,1,1];
+  f := [0,60,-60,0];
+  for i := 0 to v-1 do
+    f[i] := f[i]*pi/180;
+  s := 0;
+  for i := 0 to v-1 do
+    s := s+l[i]*Cos(f[i]);
+  for i := 0 to v-1 do
+    l[i] := l[i]/s;
+  pbMain.Canvas.MoveTo(Trunc(xs+xf*x0),Trunc(ys+yf*y0));
+  for k := 0 to u-1 do
+  begin
+    for n := 0 to Trunc(Power(v,p)-1) do
+    begin
+      m := n;
+      for j := 0 to p-1 do
+      begin
+        t[j] := m mod v;
+        m := m div v;
+      end;
+      ll := a[k];
+      ff := b[k];
+      for j := 0 to p-1 do
+      begin
+        ll := ll*l[t[j]];
+        ff := ff+f[t[j]];
+      end;
+      x := ll*Cos(ff);
+      y := ll*Sin(ff);
+      pbMain.Canvas.LineTo(Trunc(xs+xf*(x+x0)),Trunc(ys+yf*(y+y0)));
+      x0 := x0+x;
+      y0 := y0+y;
     end;
   end;
 end;
@@ -1581,7 +1650,7 @@ end;
 procedure TfrmMain.miPythb3Click(Sender: TObject);
 var
   x1,y1,x2,y2,u1,v1,u2,v2: Array [0..12] of Double;
-  p, j, n ,m,s1: Integer;
+  p, n ,m,s1: Integer;
   f,c,s,a1,a2,b1,b2,c1,c2,d1,d2,x,y,u,v,x3,y3: Double;
   procedure Tekenboom;
   var
@@ -2142,6 +2211,78 @@ begin
   end;
 end;
 
+procedure TfrmMain.miWolk1Click(Sender: TObject);
+var
+  a,b,pp,w,xx,yy,z: Double;
+  p,x,y: Array of Double;
+  k,n: Integer;
+
+  procedure Gosub140;
+  begin
+    w := xx*(a+b/(1+Abs(xx)));
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Banen van dynamisch systeem: Wolk1';
+  MinMaxPercNegYfToSmallestFactShift(-15,16,-15.25,15.25,0.05,True);
+  a := -0.5;
+  b := 2;
+  x := [2,4,6,8,10,12,14,16];
+  y := [0,0,0,0,0,0,0,0];
+  p := [200,400,600,800,1000,1200,1400,1600];
+  w := 0;
+  for k := 0 to 7 do
+  begin
+    xx := x[k];
+    yy := y[k];
+    pp := p[k];
+    Gosub140;
+    for n := 0 to Trunc(pp) do
+    begin
+      pbMain.Canvas.Pixels[Trunc(xs+xf*xx),Trunc(ys+yf*yy)] := clBlack;
+      z := xx;
+      xx := yy+w;
+      Gosub140;
+      yy := w-z;
+    end;
+  end;
+end;
+
+procedure TfrmMain.miWolk2Click(Sender: TObject);
+var
+  a,b,c,w,x,y,z: Double;
+  n: Integer;
+
+  procedure Gosub110;
+  begin
+    if x>0 then
+      w := a*x
+    else
+      w := b*x;
+  end;
+
+begin
+  Clear;
+  Label4.Caption := 'Banen van dynamisch systeem: Wolk2';
+  MinMaxPercNegYfToSmallestFactShift(-4.13,4.13,-2.9,5.6,0.05,True);
+  a := 0.51;
+  b := -0.49;
+  c := 0.9995;
+  x := 4;
+  y := 1;
+  w := 0;
+  Gosub110;
+  for n := 0 to 9000 do
+  begin
+    pbMain.Canvas.Pixels[Trunc(xs+xf*y),Trunc(ys+yf*x)] := clBlack;
+    z := x;
+    x := c*y+w;
+    Gosub110;
+    y := w-z;
+  end;
+end;
+
 procedure TfrmMain.miWolkClick(Sender: TObject);
 var
   a,b,w,x,y,z: Double;
@@ -2217,6 +2358,7 @@ begin
   case i of
     0: miBoomH1Click(Self);
     10: miDraakClick(Self);
+    39: miKronkeltClick(Self);
   end;
 end;
 
