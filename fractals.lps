@@ -182,6 +182,10 @@
         <Filename Value="main.pas"/>
         <Caret Line="731" Column="5" TopLine="112"/>
       </Position>
+      <Position>
+        <Filename Value="main.pas"/>
+        <Caret Line="582" Column="53" TopLine="573"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
