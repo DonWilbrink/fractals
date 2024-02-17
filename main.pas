@@ -21,6 +21,7 @@ type
     Label4: TLabel;
     Label5: TLabel;
     MainMenu1: TMainMenu;
+    miKronkelb: TMenuItem;
     miKronkelt: TMenuItem;
     miWolk2: TMenuItem;
     miWolk1: TMenuItem;
@@ -83,6 +84,7 @@ type
     procedure miJuliabClick(Sender: TObject);
     procedure miKamClick(Sender: TObject);
     procedure miKochClick(Sender: TObject);
+    procedure miKronkelbClick(Sender: TObject);
     procedure miKronkelClick(Sender: TObject);
     procedure miKronkeltClick(Sender: TObject);
     procedure miLevyClick(Sender: TObject);
@@ -429,6 +431,7 @@ begin
     37: miWolk1Click(Self);
     38: miWolk2Click(Self);
     39: miKronkeltClick(Self);
+    40: miKronkelbClick(Self);
   end;
 end;
 
@@ -886,6 +889,104 @@ begin
     x := x + Cos(pi * s / 3) * h;
     y := y + Sin(pi * s / 3) * h;
     pbMain.Canvas.LineTo(Trunc(xs+xf*x),Trunc(ys+yf*y));
+  end;
+end;
+
+procedure TfrmMain.miKronkelbClick(Sender: TObject);
+var
+  i,n,m,p,q,s,u,v: Integer;
+  aa,bb,xx,yy,x0,y0: Double;
+  a,b,c,d,f,l: Array of Double;
+  x,y: Array of Array of Double;
+
+  Procedure Gosub260;
+  var j,k,l: Integer;
+  begin
+    for j := s to p do
+    begin
+      for k := 1 to v do
+      begin
+        x[k,j] := c[k]*x[1,j-1]-d[k]*y[1,j-1];
+        y[k,j] := d[k]*x[1,j-1]+c[k]*y[1,j-1];
+      end;
+    end;
+    for l := 1 to v do
+    begin
+      xx := aa*x[l,p]-bb*y[l,p];
+      yy := bb*x[l,p]+aa*y[l,p];
+		  x0 := x0 + xx;
+      y0 := y0 + yy;
+      pbMain.Canvas.LineTo(Trunc(xs + xf * x0), Trunc(ys + yf * y0));
+    end;
+  end;
+
+  procedure Gosub240;
+  var i: Integer;
+  begin
+    for i := 1 to v-1 do
+    begin
+      x[i,s-1] := x[i+1,s-1];
+      y[i,s-1] := y[i+1,s-1];
+    end;
+  end;
+
+begin
+  pbMain.Canvas.Clear;
+  Label4.Caption := 'Fractal kromme met motief, backtrackmethode';
+  Label1.Caption := 'Orde';
+  Label1.Visible := True;
+  SpinEdit1.MinValue := 1;
+  SpinEdit1.MaxValue := 4;
+  //SpinEdit1.Value := 4;
+  SpinEdit1.Visible := True;
+  MinMaxPercNegYfToSmallestFactShift(-10,10,-10,10,0.05,True);
+  u := 4;
+  a := [2,2,2,2];
+  b := [0,90,180,-90];
+  x0 := -5;
+  y0 := -5;
+  for i := 0 to u-1 do
+    b[i] := b[i]*pi/180;
+  v := 4;
+  SetLength(c,v+1);
+  SetLength(d,v+1);
+  l := [0,1,1,1,1];
+  f := [0,0,60,-60,0];
+  for i := 1 to v do
+    f[i] := f[i]*pi/180;
+  s := 0;
+  for i := 1 to v do
+    s := s+Trunc(l[i]*Cos(f[i]));
+  for i := 1 to v do
+  begin
+    l[i] := l[i]/s;
+    c[i] := l[i]*Cos(f[i]);
+    d[i] := l[i]*Sin(f[i]);
+  end;
+  p := SpinEdit1.Value;
+  SetLength(x,v+1,p+1);
+  SetLength(y,v+1,p+1);
+  pbMain.Canvas.MoveTo(Trunc(xs+xf*x0),Trunc(ys+yf*y0));
+  for q := 0 to u-1 do
+  begin
+    x[1,0] := 1;
+    y[1,0] := 0;
+    s := 1;
+    aa := a[q]*Cos(b[q]);
+    bb := a[q]*sin(b[q]);
+    Gosub260;
+    for m := 1 to Trunc(Power(v,p-1))-1 do
+    begin
+      n := m;
+      s := p;
+      while n mod v = 0 do
+      begin
+        n := n div v;
+        s := s-1;
+      end;
+      Gosub240;
+      Gosub260;
+    end;
   end;
 end;
 
@@ -2359,6 +2460,7 @@ begin
     0: miBoomH1Click(Self);
     10: miDraakClick(Self);
     39: miKronkeltClick(Self);
+    40: miKronkelbClick(Self);
   end;
 end;
 
