@@ -112,7 +112,6 @@ type
     procedure SpinEdit1Change(Sender: TObject);
     procedure SpinEdit2Change(Sender: TObject);
   private
-    procedure Teken;
     procedure Clear;
     procedure MinMaxPercNegYfToSmallestFactShift(xlo,xhi,ylo,yhi,perc : double; NegYf : boolean);
     procedure MinMaxPercXPercYToFactShift(xlo, xhi, ylo, yhi, PercX,PercY: double; NegYf: boolean);
@@ -123,9 +122,7 @@ type
 
 var
   frmMain: TfrmMain;
-  a, b, c, n, x, y, xf, yf, xs, ys: Double;
-  j, m, p, s: Integer;
-  x1, x2 , x3, x4, y1, y2, y3, y4: Array[0..4] of Double;
+  xf, yf, xs, ys: Double;
   EgaColor : array[0..15] of TColor =
     (TColor($000000),TColor($AA0000),TColor($00AA00),TColor($AAAA00),
      TColor($0000AA),TColor($AA00AA),TColor($0055AA),TColor($AAAAAA),
@@ -444,6 +441,38 @@ begin
 end;
 
 procedure TfrmMain.miBoomH2Click(Sender: TObject);
+var
+  a, b, c, n, x, y: Double;
+  j, m, p, s: Integer;
+  x1, x2 , x3, x4, y1, y2, y3, y4: Array[0..4] of Double;
+
+   procedure Teken;
+   var
+     j: Integer;
+   begin
+     for j:= s to p do
+     begin
+       x := x1[j-1];
+       y := y1[j-1];
+       b := Power(a,j);
+       c := a * b * 1.5;
+       x1[j] := x + b;
+       y1[j] := y + c;
+       x2[j] := x + b;
+       y2[j] := y - c;
+       x3[j] := x - b;
+       y3[j] := y + c;
+       x4[j] := x - b;
+       y4[j] := y - c;
+       with pbMain.Canvas do
+       begin
+         Line(Trunc(xs+xf*(x-b)),Trunc(ys+yf*y),Trunc(xs+xf*(x+b)),Trunc(ys+yf*y));
+         Line(Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j]),Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j]));
+         Line(Trunc(xs+xf*x3[j]),Trunc(ys+yf*y3[j]),Trunc(xs+xf*x4[j]),Trunc(ys+yf*y4[j]));
+       end;
+     end;
+   end;
+
 begin
   Clear;
   Label4.Caption := 'Boomfractal op letter H, backtrack methode';
@@ -760,9 +789,9 @@ end;
 
 procedure TfrmMain.miJuliabClick(Sender: TObject);
 var
-  n,p: Integer;
-  r,t,x,y: Double;
-  x1,x2,y1,y2: Array[0..16] of Double;
+  m,n,p,s: Integer;
+  a,b,r,t,x,y: Double;
+  x1,x2,y1,y2: Array[0..20] of Double;
 
   procedure gosub130;
   var
@@ -778,8 +807,8 @@ var
       x2[j] := -x1[j];
       y1[j] := Sqrt(r-t)*Sign(y-b);
       y2[j] := -y1[j];
-      pbMain.Canvas.Pixels[Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j])] := clBlack;
-      pbMain.Canvas.Pixels[Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j])] := clBlack;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j])] := EgaColor[j mod 16];
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j])] := EgaColor[j mod 16];
     end;
   end;
 
@@ -787,13 +816,14 @@ begin
   Clear;
   Label4.Caption := 'Julia fractal van Z:=Z^2+C';
   MinMaxPercNegYfToSmallestFactShift(-2,2,-1.5,1.5,0.05,True);
-  p := 16;
+  p := 20;
   a := 0;
   b := 1;
   x1[0] := -1.3002;
   y1[0] := 0.6248;
   pbMain.Canvas.Pixels[Trunc(xs+xf*x1[0]),Trunc(ys+yf*y1[0])] := clBlack;
   s := 1;
+  Screen.Cursor := crHourGlass;
   gosub130;
   for m := 1 to Trunc(Power(2,p-1)-1) do
   begin
@@ -808,6 +838,7 @@ begin
       gosub130;
     end;
   end;
+  Screen.Cursor := crDefault;
 end;
 
 procedure TfrmMain.miKamClick(Sender: TObject);
@@ -914,7 +945,7 @@ var
     begin
       xx := aa*x[l,p]-bb*y[l,p];
       yy := bb*x[l,p]+aa*y[l,p];
-		  x0 := x0 + xx;
+      x0 := x0 + xx;
       y0 := y0 + yy;
       pbMain.Canvas.LineTo(Trunc(xs + xf * x0), Trunc(ys + yf * y0));
     end;
@@ -936,15 +967,15 @@ begin
   Label1.Caption := 'Orde';
   Label1.Visible := True;
   SpinEdit1.MinValue := 1;
-  SpinEdit1.MaxValue := 4;
+  SpinEdit1.MaxValue := 5;
   //SpinEdit1.Value := 4;
   SpinEdit1.Visible := True;
-  MinMaxPercNegYfToSmallestFactShift(-10,10,-10,10,0.05,True);
+  MinMaxPercNegYfToSmallestFactShift(-10,10,-10,10,0.05,False);
   u := 4;
   a := [2,2,2,2];
   b := [0,90,180,-90];
-  x0 := -5;
-  y0 := -5;
+  x0 := -8;
+  y0 := -8;
   for i := 0 to u-1 do
     b[i] := b[i]*pi/180;
   v := 4;
@@ -994,7 +1025,7 @@ procedure TfrmMain.miKronkelClick(Sender: TObject);
 var
   x, y: Array [0..4096] of Double;
   a, b, c, d: Array [0..7] of Double;
-  i, j, k, l, m, m1, m2, n, u, v: Integer;
+  i, j, k, l, m, m1, m2, n, p, u, v: Integer;
   aa, bb, xx, yy, x1, y1: Double;
 begin
   Clear;
@@ -1369,8 +1400,8 @@ end;
 
 procedure TfrmMain.miKronkeltClick(Sender: TObject);
 var
-  i,k,m,n,p,u,v: Integer;
-  ff,ll,s,x0,y0: Double;
+  i,j,k,m,n,p,u,v: Integer;
+  ff,ll,s,x,x0,y,y0: Double;
   t: Array[0..5] of Integer;
   a,b,f,l: Array of Double;
 begin
@@ -1496,7 +1527,8 @@ begin
   p3 := 1.5;
   p4 := 1.5;
   n1 := pbMain.Canvas.Width div 2;
-  n2 := Trunc(0.833*n1*(p4-p2)/(p3-p1));
+  //n2 := Trunc(0.833*n1*(p4-p2)/(p3-p1));
+  n2 := pbMain.Canvas.Height div 2;
   for i := -n1 to n1 do
   begin
     a := ((n1-i)*p1+(n1+i)*p3)/(2*n1);
@@ -1505,15 +1537,15 @@ begin
       b := ((n2-j)*p2+(n2+j)*p4)/(2*n2);
       x := a;
       y := b;
-      for k := 1 to 50 do
+      for k := 0 to 49 do
       begin
         z := x;
         x := x*x-y*y+a;
         y := 2*y*z+b;
         if x*x+y*y > 16 then break;
       end;
-      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50-j] := EgaColor[k mod 16];
-      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50+j] := EgaColor[k mod 16];
+      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50-j] := EgaColor[(k-1) mod 16];
+      pbMain.Canvas.Pixels[pbMain.Canvas.Width div 2+i,pbMain.Canvas.Height div 2-50+j] := EgaColor[(k-1) mod 16];
     end;
   end;
 end;
@@ -2154,7 +2186,7 @@ procedure TfrmMain.miStofbtClick(Sender: TObject);
 var
   m,n,p,s: Integer;
   x1,x2,x3,y1,y2,y3: Array [0..7] of Double;
-  a,b,c,d,e,f,g,h,t1,t2: Double;
+  a,b,c,d,e,f,g,h,t1,t2,x,y: Double;
 
   procedure Goto150;
   var
@@ -2254,7 +2286,7 @@ begin
       x := c*x-d*y+1-c;
       y := d*z+a*y-d;
     end;
-    pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := clBlue;;
+    pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := EgaColor[k mod 16];;
   end;
 end;
 
@@ -2299,6 +2331,8 @@ begin
   MinMaxPercNegYfToSmallestFactShift(-4.72,7.86,-6.29,3.15,0.05,True);
   a := 1;
   pbMain.Canvas.Brush.Color := clBlue;
+  pbMain.Canvas.EllipseC(Trunc(xs),Trunc(ys),Round(xf*a/5),Round(yf*a/5));
+  pbMain.Canvas.Brush.Style := bsClear;
   pbMain.Canvas.EllipseC(Trunc(xs),Trunc(ys),Round(xf*a),Round(yf*a));
   pbMain.Canvas.MoveTo(Round(xs+xf*a),Round(ys));
   for n := 0 to 100 do
@@ -2437,7 +2471,7 @@ begin
     Gosub170;
     for n := 0 to p do
     begin
-      pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := n*4000*p; //clBlack;
+      pbMain.Canvas.Pixels[Trunc(xs+xf*x),Trunc(ys+yf*y)] := EgaColor[n mod 16]; //clBlack;
       z := x;
       x := y+w;
       Gosub170;
@@ -2467,33 +2501,6 @@ end;
 procedure TfrmMain.SpinEdit2Change(Sender: TObject);
 begin
   miWolkClick(Self);
-end;
-
-procedure TfrmMain.Teken;
-var
-  j: Integer;
-begin
-  for j:= s to p do
-  begin
-    x := x1[j-1];
-    y := y1[j-1];
-    b := Power(a,j);
-    c := a * b * 1.5;
-    x1[j] := x + b;
-    y1[j] := y + c;
-    x2[j] := x + b;
-    y2[j] := y - c;
-    x3[j] := x - b;
-    y3[j] := y + c;
-    x4[j] := x - b;
-    y4[j] := y - c;
-    with pbMain.Canvas do
-    begin
-      Line(Trunc(xs+xf*(x-b)),Trunc(ys+yf*y),Trunc(xs+xf*(x+b)),Trunc(ys+yf*y));
-      Line(Trunc(xs+xf*x1[j]),Trunc(ys+yf*y1[j]),Trunc(xs+xf*x2[j]),Trunc(ys+yf*y2[j]));
-      Line(Trunc(xs+xf*x3[j]),Trunc(ys+yf*y3[j]),Trunc(xs+xf*x4[j]),Trunc(ys+yf*y4[j]));
-    end;
-  end;
 end;
 
 procedure TfrmMain.Clear;
