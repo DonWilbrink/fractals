@@ -12,7 +12,7 @@
         <EditorIndex Value="2"/>
         <TopLine Value="6"/>
         <CursorPos Y="25"/>
-        <UsageCount Value="151"/>
+        <UsageCount Value="152"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -22,9 +22,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="452"/>
-        <CursorPos X="3" Y="477"/>
-        <UsageCount Value="151"/>
+        <TopLine Value="1017"/>
+        <CursorPos X="12" Y="1028"/>
+        <UsageCount Value="152"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -36,7 +36,8 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <CursorPos X="7"/>
-        <UsageCount Value="58"/>
+        <ComponentState Value="1"/>
+        <UsageCount Value="59"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -162,7 +163,7 @@
       </Position>
       <Position>
         <Filename Value="main.pas"/>
-        <Caret Line="127" Column="50" TopLine="134"/>
+        <Caret Line="477" Column="3" TopLine="452"/>
       </Position>
     </JumpHistory>
     <RunParams>

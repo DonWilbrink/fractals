@@ -443,7 +443,7 @@ end;
 procedure TfrmMain.miBoomH2Click(Sender: TObject);
 var
   a, b, c, n, x, y: Double;
-  j, m, p, s: Integer;
+  m, p, s: Integer;
   x1, x2 , x3, x4, y1, y2, y3, y4: Array[0..4] of Double;
 
    procedure Teken;
@@ -1025,7 +1025,7 @@ procedure TfrmMain.miKronkelClick(Sender: TObject);
 var
   x, y: Array [0..4096] of Double;
   a, b, c, d: Array [0..7] of Double;
-  i, j, k, l, m, m1, m2, n, p, u, v: Integer;
+  i, j, k, m, m1, m2, n, p, u, v: Integer;
   aa, bb, xx, yy, x1, y1: Double;
 begin
   Clear;
