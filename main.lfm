@@ -1,22 +1,23 @@
 object frmMain: TfrmMain
   Left = 329
-  Height = 800
+  Height = 827
   Top = 68
   Width = 1000
   Caption = 'Fractals'
-  ClientHeight = 800
+  ClientHeight = 827
   ClientWidth = 1000
   Color = clSilver
   DesignTimePPI = 120
   Menu = MainMenu1
+  Position = poScreenCenter
+  LCLVersion = '4.0.0.1'
   OnCreate = FormCreate
   OnResize = FormResize
-  Position = poScreenCenter
   object pbMain: TPaintBox
-    Left = 40
-    Height = 756
-    Top = 60
-    Width = 790
+    Left = 16
+    Height = 752
+    Top = 64
+    Width = 814
     Anchors = [akTop, akLeft, akRight, akBottom]
     ParentColor = False
   end
@@ -26,10 +27,10 @@ object frmMain: TfrmMain
     Top = 56
     Width = 119
     Anchors = [akTop, akRight]
-    OnChange = SpinEdit1Change
     TabOrder = 0
     Value = 1
     Visible = False
+    OnChange = SpinEdit1Change
   end
   object Label1: TLabel
     Left = 856
@@ -136,9 +137,9 @@ object frmMain: TfrmMain
     Top = 370
     Width = 94
     Anchors = [akTop, akRight]
-    OnChange = SpinEdit2Change
     TabOrder = 3
     Value = 100
+    OnChange = SpinEdit2Change
   end
   object MainMenu1: TMainMenu
     Left = 56

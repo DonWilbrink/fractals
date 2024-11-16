@@ -734,9 +734,9 @@ begin
   Label1.Visible := True;
   SpinEdit1.Visible := True;
   SpinEdit1.MinValue := 0;
-  SpinEdit1.MaxValue := 9;
+  SpinEdit1.MaxValue := 12;
   SpinEdit1.Increment := 1;
-  MinMaxPercNegYfToSmallestFactShift(-2.5,1.5,-2,1,0.05,False);
+  MinMaxPercNegYfToSmallestFactShift(-1.5,2,-1.1,0.4,0.05,False);
   p := SpinEdit1.Value;
   h := Power(2,-p/2);
   a := 1.7453;
@@ -1466,7 +1466,7 @@ begin
   Clear;
   Label4.Caption := 'Pythagoraslijn';
   MinMaxPercNegYfToSmallestFactShift(-0.484,1.484,-1.000,0.250,0.05,True);
-  p := 12;
+  p := 8;
   h := Power(2,-(p/2));
   a := h*Cos(p*pi/4);
   b := h*Sin(p*pi/4);
